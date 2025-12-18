@@ -1,0 +1,66 @@
+quarkus:
+  datasource:
+    db-kind: other
+    username: DAADATAPER
+    password: PANAMA1
+    jdbc:
+      driver: com.ibm.as400.access.AS400JDBCDriver
+      url: jdbc:as400://10.246.17.67;
+        databaseName=HOWARD1;
+        libraries=DAPCYFILES;
+        naming=sql;
+        errors=full;
+        ccsid=1208;
+        prompt=false;
+        loginTimeout=60;
+        blockSize=512
+      min-size: 0
+      max-size: 1
+      acquisition-timeout: 60
+      transaction-isolation-level: read-uncommitted
+
+      # 🔑 CLAVE PARA jt400
+      additional-jdbc-properties:
+        autocommit: true
+        connectionSharing: false
+        holdability: close
+
+      # 🔴 DESACTIVAR TODA VALIDACIÓN
+      validate-on-borrow: false
+      validate-on-return: false
+      background-validation: false
+      validation-query: null
+
+  # 🔴 Narayana solo para casos puntuales
+  transaction-manager:
+    default-transaction-timeout: 30s
+
+  hibernate-orm:
+    packages: org.acme.domain.entities
+    dialect: org.hibernate.dialect.DB2Dialect
+
+    # 🔴 Hibernate SOLO como ORM, NO como gestor DB
+    schema-management:
+      strategy: none
+
+    database:
+      version-check:
+        enabled: false
+
+    validate-in-dev-mode: false
+
+    jdbc:
+      statement-fetch-size: 20
+      statement-batch-size: 0   # 🔑 batch OFF (jt400 es sensible)
+
+    log:
+      sql: false
+
+  log:
+    category:
+      "io.agroal.pool":
+        level: ERROR
+      "io.quarkus.agroal":
+        level: ERROR
+      "org.hibernate.orm.jdbc.bind":
+        level: TRACE
