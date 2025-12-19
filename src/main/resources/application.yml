@@ -7,7 +7,7 @@ quarkus:
       driver: com.ibm.as400.access.AS400JDBCDriver
       url: jdbc:as400://10.246.17.67;
         databaseName=HOWARD1;
-        libraries=DAPCYFILES;
+        libraries=DAPCYFILES,PRESURLIB;
         naming=sql;
         errors=full;
         ccsid=1208;
