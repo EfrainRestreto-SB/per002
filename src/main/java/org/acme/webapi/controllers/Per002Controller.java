@@ -46,7 +46,15 @@ public class Per002Controller {
             headersPer002RequestDto = InputHeadersPer002Validator.validateInputHeaders(httpHeaders);
 
         } catch (BadRequestException brex) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            Map<String, Object> responseHeaders = Map.of(
+                    "caracterAceptacion", "M",
+                    "codMsgRespuesta", String.valueOf(Response.Status.BAD_REQUEST),
+                    "msgRespuesta", brex.getMessage()
+            );
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            builder.entity(Map.of("validationError", brex.getMessage()));
+            responseHeaders.forEach(builder::header);
+            return builder.build();
         }
 
         // Mapeo de campos de entrada de Model a Dto
@@ -58,8 +66,20 @@ public class Per002Controller {
             Per002ResponseDto per002ResponseDto = per002UseCase.ConsultaCostoTransaccionPer(headersPer002RequestDto, per002RequestDto);
             per002ResponseModel = per002Mapper.toResponseModel(per002ResponseDto);
         }
-        catch (IllegalArgumentException iaex) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        catch (Exception ex) {
+            Map<String, Object> responseHeaders = Map.of(
+                    "nombreOperacion", headersPer002RequestDto.getNombreOperacion(),
+                    "total", headersPer002RequestDto.getTotal(),
+                    "caracterAceptacion", "M",
+                    "ultimoMensaje", 1,
+                    "idTransaccion", headersPer002RequestDto.getIdTransaccion(),
+                    "codMsgRespuesta", String.valueOf(Response.Status.INTERNAL_SERVER_ERROR),
+                    "msgRespuesta", ex.getMessage()
+            );
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(Map.of("InternalServerError", ex.getMessage()));
+            responseHeaders.forEach(builder::header);
+            return builder.build();
         }
 
         // Respuesta con headers

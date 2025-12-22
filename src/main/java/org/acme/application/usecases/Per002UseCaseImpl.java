@@ -15,6 +15,7 @@ import org.acme.domain.interfaces.usecases.Per002UseCase;
 import org.acme.domain.ports.output.AuditPort;
 import org.acme.persistence.repositories.Per002StatelessRepository;
 import org.acme.transversal.utils.AuditUtils;
+import org.acme.transversal.utils.Utilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,6 +86,7 @@ public class Per002UseCaseImpl implements Per002UseCase {
 
             // 5️⃣ Respuesta
             Per002ResponseDto response = Per002ResponseDto.builder()
+                    .fecHoraMovimiento(Utilities.getDateNowFormatted())
                     .codMonedaTransaccion(cntrlprf.getMoneyType())
                     .costoDeLaTransaccion(cntrlprf.getMount())
                     .build();
