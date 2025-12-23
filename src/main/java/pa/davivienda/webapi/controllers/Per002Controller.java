@@ -2,15 +2,6 @@ package pa.davivienda.webapi.controllers;
 
 import java.util.Map;
 
-import pa.davivienda.domain.dtos.requests.HeadersPer002RequestDto;
-import pa.davivienda.domain.dtos.requests.Per002RequestDto;
-import pa.davivienda.domain.dtos.responses.Per002ResponseDto;
-import pa.davivienda.domain.interfaces.usecases.Per002UseCase;
-import pa.davivienda.domain.models.requests.Per002RequestModel;
-import pa.davivienda.domain.models.responses.Per002ResponseModel;
-import pa.davivienda.transversal.mappers.Per002Mapper;
-import pa.davivienda.webapi.validators.InputHeadersPer002Validator;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.Consumes;
@@ -21,6 +12,14 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pa.davivienda.domain.dtos.requests.HeadersPer002RequestDto;
+import pa.davivienda.domain.dtos.requests.Per002RequestDto;
+import pa.davivienda.domain.dtos.responses.Per002ResponseDto;
+import pa.davivienda.domain.interfaces.usecases.Per002UseCase;
+import pa.davivienda.domain.models.requests.Per002RequestModel;
+import pa.davivienda.domain.models.responses.Per002ResponseModel;
+import pa.davivienda.transversal.mappers.Per002Mapper;
+import pa.davivienda.webapi.validators.InputHeadersPer002Validator;
 
 @Path("per002")
 public class Per002Controller {
@@ -32,14 +31,6 @@ public class Per002Controller {
     Per002Mapper per002Mapper;
 
     @POST
-    @Path("/consultaCostos")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response consultaCostoTransaccionPer2() {
-        return Response.ok().build();
-    }
-
-    @POST
     @Path("/consultaCosto")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -49,9 +40,9 @@ public class Per002Controller {
     ) {
 
         // Obtencion de los headers y su validacion requerida
-        HeadersPer002RequestDto headersPer002RequestDto = null;
+        HeadersPer002RequestDto headers = null;
         try {
-            headersPer002RequestDto = InputHeadersPer002Validator.validateInputHeaders(httpHeaders);
+            headers = InputHeadersPer002Validator.validateInputHeaders(httpHeaders);
 
         } catch (BadRequestException brex) {
             Map<String, Object> responseHeaders = Map.of(
@@ -71,16 +62,16 @@ public class Per002Controller {
         // Ejecucion de logica de negocio
         Per002ResponseModel per002ResponseModel;
         try {
-            Per002ResponseDto per002ResponseDto = per002UseCase.consultaCostoTransaccionPer(headersPer002RequestDto, per002RequestDto);
+            Per002ResponseDto per002ResponseDto = per002UseCase.consultaCostoTransaccionPer(headers, per002RequestDto);
             per002ResponseModel = per002Mapper.toResponseModel(per002ResponseDto);
         }
         catch (Exception ex) {
             Map<String, Object> responseHeaders = Map.of(
-                    "nombreOperacion", headersPer002RequestDto.getNombreOperacion(),
-                    "total", headersPer002RequestDto.getTotal(),
+                    "nombreOperacion", headers.getNombreOperacion(),
+                    "total", headers.getTotal(),
                     "caracterAceptacion", "M",
                     "ultimoMensaje", 1,
-                    "idTransaccion", headersPer002RequestDto.getIdTransaccion(),
+                    "idTransaccion", headers.getIdTransaccion(),
                     "codMsgRespuesta", String.valueOf(Response.Status.INTERNAL_SERVER_ERROR),
                     "msgRespuesta", ex.getMessage()
             );
@@ -92,11 +83,11 @@ public class Per002Controller {
 
         // Respuesta con headers
         Map<String, Object> responseHeaders = Map.of(
-                "nombreOperacion", headersPer002RequestDto.getNombreOperacion(),
-                "total", headersPer002RequestDto.getTotal(),
+                "nombreOperacion", headers.getNombreOperacion(),
+                "total", headers.getTotal(),
                 "caracterAceptacion", "1.0",
                 "ultimoMensaje", "1.0",
-                "idTransaccion", headersPer002RequestDto.getIdTransaccion(),
+                "idTransaccion", headers.getIdTransaccion(),
                 "codMsgRespuesta", "1.0",
                 "msgRespuesta", "1.0"
         );

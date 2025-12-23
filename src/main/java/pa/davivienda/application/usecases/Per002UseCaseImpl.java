@@ -3,23 +3,22 @@ package pa.davivienda.application.usecases;
 import java.util.HashMap;
 import java.util.Map;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import pa.davivienda.application.validators.InputTransactionCodeValidator;
 import pa.davivienda.domain.constants.Constants;
 import pa.davivienda.domain.dtos.requests.HeadersPer002RequestDto;
 import pa.davivienda.domain.dtos.requests.Per002RequestDto;
 import pa.davivienda.domain.dtos.responses.Per002ResponseDto;
 import pa.davivienda.domain.entities.AuditLog;
-import pa.davivienda.domain.entities.TransactionCost;
 import pa.davivienda.domain.entities.Customer;
+import pa.davivienda.domain.entities.TransactionCost;
 import pa.davivienda.domain.enums.AuditMessageType;
 import pa.davivienda.domain.interfaces.usecases.Per002UseCase;
 import pa.davivienda.domain.ports.output.AuditPort;
 import pa.davivienda.persistence.repositories.Per002StatelessRepository;
 import pa.davivienda.transversal.utils.AuditUtils;
 import pa.davivienda.transversal.utils.Utilities;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class Per002UseCaseImpl implements Per002UseCase {

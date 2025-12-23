@@ -1,13 +1,14 @@
 package pa.davivienda.persistence.repositories;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import pa.davivienda.domain.entities.TransactionCost;
-import pa.davivienda.domain.entities.Customer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import pa.davivienda.domain.entities.Customer;
+import pa.davivienda.domain.entities.TransactionCost;
 
 @ApplicationScoped
 public class Per002StatelessRepository {
