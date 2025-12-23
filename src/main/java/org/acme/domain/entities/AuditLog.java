@@ -80,6 +80,12 @@ public class AuditLog {
     private String origen = "PER002";
     
     /**
+     * Servicio que genera el registro de auditoría
+     */
+    @Builder.Default
+    private String servicio = "PER002";
+    
+    /**
      * Sistema/Usuario creador
      */
     @Builder.Default

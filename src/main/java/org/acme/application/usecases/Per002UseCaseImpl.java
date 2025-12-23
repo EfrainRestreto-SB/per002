@@ -1,7 +1,8 @@
 package org.acme.application.usecases;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.acme.application.validators.InputTransactionCodeValidator;
 import org.acme.domain.constants.Constants;
 import org.acme.domain.dtos.requests.HeadersPer002RequestDto;
@@ -17,8 +18,8 @@ import org.acme.persistence.repositories.Per002StatelessRepository;
 import org.acme.transversal.utils.AuditUtils;
 import org.acme.transversal.utils.Utilities;
 
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class Per002UseCaseImpl implements Per002UseCase {
@@ -47,7 +48,12 @@ public class Per002UseCaseImpl implements Per002UseCase {
                 throw new IllegalArgumentException("Canal inválido");
             }
 
-            // 2️⃣ Homologación de transacción
+            // 2️⃣ Validación de código de país
+            if (!InputTransactionCodeValidator.codPaisValidate(request.getCodPais())) {
+                throw new IllegalArgumentException("Código de país no permitido");
+            }
+
+            // 3️⃣ Homologación de transacción
             String trxCode = InputTransactionCodeValidator.getTransactionCodeHomologate(request.getCodTipoConcepto());
 
             // 📝 AUDITORÍA 2: TRAMA_OUT (Query 1 - CUMST)

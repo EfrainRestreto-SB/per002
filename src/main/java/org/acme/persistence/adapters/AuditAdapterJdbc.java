@@ -120,8 +120,9 @@ public class AuditAdapterJdbc implements AuditPort {
                         ESTADO,
                         DETALLE_ERROR,
                         ORIGEN,
+                        SERVICIO,
                         CREATED_BY
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """;
                 
                 // Calcular hash si no está calculado
@@ -143,7 +144,8 @@ public class AuditAdapterJdbc implements AuditPort {
                     .setParameter(9, auditLog.getEstado())
                     .setParameter(10, auditLog.getDetalleError())
                     .setParameter(11, auditLog.getOrigen())
-                    .setParameter(12, auditLog.getCreatedBy())
+                    .setParameter(12, auditLog.getServicio())
+                    .setParameter(13, auditLog.getCreatedBy())
                     .executeUpdate();
                 
                 // Commit transacción

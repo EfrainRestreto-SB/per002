@@ -137,3 +137,6 @@ coverage/
 *.tmp
 temp/
 tmp/
+*.md
+PA_NitOrigen_UAT_2 (1).xml
+*.sql
