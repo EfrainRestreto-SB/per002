@@ -5,6 +5,36 @@ import jakarta.ws.rs.core.HttpHeaders;
 import pa.davivienda.domain.dtos.requests.HeadersPer002RequestDto;
 import pa.davivienda.transversal.utils.Utilities;
 
+/**
+ * Validador de headers HTTP requeridos por el BUS para el servicio PER002.
+ * 
+ * <p>Esta clase realiza validación exhaustiva de los 9 headers obligatorios necesarios
+ * para procesar una solicitud de consulta de costos. Las validaciones incluyen:</p>
+ * <ul>
+ *   <li>Presencia de todos los headers requeridos</li>
+ *   <li>Validación de valores vacíos</li>
+ *   <li>Validación de formato numérico para: Total, jornada, Canal, modoDeOperacion, perfil</li>
+ *   <li>Manejo de excepciones con mensajes claros</li>
+ * </ul>
+ * 
+ * <p>Headers validados:</p>
+ * <ul>
+ *   <li>nombreOperacion - Nombre de la operación invocada</li>
+ *   <li>Total - Cantidad de registros (Integer)</li>
+ *   <li>jornada - Identificador de jornada (Integer)</li>
+ *   <li>Canal - Canal de origen: 81 o 151 (Short)</li>
+ *   <li>modoDeOperacion - Modo de operación (Short)</li>
+ *   <li>usuario - Usuario que realiza la operación</li>
+ *   <li>perfil - Perfil del usuario (Integer)</li>
+ *   <li>versionServicio - Versión del servicio</li>
+ *   <li>idTransaccion - Identificador único de la transacción</li>
+ * </ul>
+ * 
+ * @author Equipo PER002
+ * @version 1.0.0
+ * @since 2025-12-24
+ * @see HeadersPer002RequestDto
+ */
 public class InputHeadersPer002Validator {
 
     public static HeadersPer002RequestDto validateInputHeaders(HttpHeaders httpHeaders) {

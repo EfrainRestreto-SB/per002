@@ -21,6 +21,28 @@ import pa.davivienda.domain.models.responses.Per002ResponseModel;
 import pa.davivienda.transversal.mappers.Per002Mapper;
 import pa.davivienda.webapi.validators.InputHeadersPer002Validator;
 
+/**
+ * Controlador REST para la consulta de costos de transacciones.
+ * 
+ * <p>Provee el endpoint principal para determinar el costo de una transacción bancaria
+ * basado en el tipo de cliente y el concepto de operación. Este controlador maneja
+ * la validación de headers, transformación de modelos y orquestación del caso de uso.</p>
+ * 
+ * <p>El servicio implementa auditoría completa de todas las operaciones y maneja
+ * diferentes códigos de respuesta HTTP según el tipo de error encontrado:</p>
+ * <ul>
+ *   <li>200 OK - Consulta exitosa</li>
+ *   <li>400 Bad Request - Errores de validación</li>
+ *   <li>500 Internal Server Error - Errores del servidor</li>
+ * </ul>
+ * 
+ * @author Equipo PER002
+ * @version 1.0.0
+ * @since 2025-12-24
+ * @see Per002UseCase
+ * @see Per002RequestModel
+ * @see Per002ResponseModel
+ */
 @Path("per002")
 public class Per002Controller {
 
@@ -30,6 +52,31 @@ public class Per002Controller {
     @Inject
     Per002Mapper per002Mapper;
 
+    /**
+     * Consulta el costo de una transacción bancaria específica.
+     * 
+     * <p>Este endpoint procesa solicitudes para obtener el costo asociado a una
+     * transacción basándose en:</p>
+     * <ul>
+     *   <li>Tipo y número de identificación del cliente</li>
+     *   <li>Código del tipo de concepto de la transacción</li>
+     *   <li>País de la operación</li>
+     *   <li>Canal de origen (81 o 151)</li>
+     * </ul>
+     * 
+     * <p>El servicio valida todos los headers obligatorios, consulta la base de datos
+     * DB2 i (AS/400) y retorna el costo en el formato especificado por el BUS.</p>
+     * 
+     * @param per002RequestModel Modelo con los datos de la transacción a consultar.
+     *                           Incluye: codTipoIdentificacion, valNumeroIdentificacion,
+     *                           codTipoConcepto, codPais
+     * @param httpHeaders Headers HTTP requeridos por el BUS. Incluye: nombreOperacion,
+     *                    Total, jornada, Canal, modoDeOperacion, usuario, perfil,
+     *                    versionServicio, idTransaccion
+     * @return Response con código 200 y el costo de la transacción si es exitoso,
+     *         400 si hay errores de validación, o 500 si ocurre un error interno
+     * @throws BadRequestException Si los headers son inválidos o están vacíos
+     */
     @POST
     @Path("/consultaCosto")
     @Consumes(MediaType.APPLICATION_JSON)

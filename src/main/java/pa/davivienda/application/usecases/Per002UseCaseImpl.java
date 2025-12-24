@@ -20,6 +20,33 @@ import pa.davivienda.persistence.repositories.Per002StatelessRepository;
 import pa.davivienda.transversal.utils.AuditUtils;
 import pa.davivienda.transversal.utils.Utilities;
 
+/**
+ * Implementación del caso de uso para consulta de costo de transacciones.
+ * 
+ * <p>Esta clase contiene la lógica de negocio principal para procesar solicitudes
+ * de consulta de costos. Implementa un flujo completo que incluye:</p>
+ * <ol>
+ *   <li>Validación exhaustiva de campos obligatorios</li>
+ *   <li>Consulta de información del cliente en CUMST (DB2 i)</li>
+ *   <li>Consulta de costos de transacción en CNTRLPRF</li>
+ *   <li>Auditoría completa con 7 puntos (ENTRADA, TRAMA_OUT, TRAMA_IN, SALIDA, ERROR)</li>
+ * </ol>
+ * 
+ * <p>Las validaciones implementadas incluyen:</p>
+ * <ul>
+ *   <li>Campos obligatorios del request (tipo identificación, número, concepto, país)</li>
+ *   <li>País permitido: solo "507" (Panamá)</li>
+ *   <li>Canal permitido: 81 o 151</li>
+ *   <li>Conceptos PER: 8 códigos válidos con homologación</li>
+ *   <li>Relación canal-concepto: reglas específicas de negocio</li>
+ * </ul>
+ * 
+ * @author Equipo PER002
+ * @version 1.0.0
+ * @since 2025-12-24
+ * @see Per002UseCase
+ * @see Per002StatelessRepository
+ */
 @ApplicationScoped
 public class Per002UseCaseImpl implements Per002UseCase {
 
