@@ -36,14 +36,68 @@ public class InputHeadersPer002Validator {
         String idTransaccion = Utilities.getSpecificHeader(httpHeaders, "idTransaccion")
                 .orElseThrow(() -> new BadRequestException("Missing header: idTransaccion"));
 
+        // Validación de valores vacíos antes del parseo
+        if (total.trim().isEmpty()) {
+            throw new BadRequestException("Header 'Total' no puede estar vacío");
+        }
+        if (jornada.trim().isEmpty()) {
+            throw new BadRequestException("Header 'jornada' no puede estar vacío");
+        }
+        if (canal.trim().isEmpty()) {
+            throw new BadRequestException("Header 'Canal' no puede estar vacío");
+        }
+        if (modoDeOperacion.trim().isEmpty()) {
+            throw new BadRequestException("Header 'modoDeOperacion' no puede estar vacío");
+        }
+        if (perfil.trim().isEmpty()) {
+            throw new BadRequestException("Header 'perfil' no puede estar vacío");
+        }
+
+        // Parseo seguro después de validación
+        int totalParsed;
+        short jornadaParsed;
+        short canalParsed;
+        short modoOperacionParsed;
+        short perfilParsed;
+        
+        try {
+            totalParsed = Integer.parseInt(total);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Header 'Total' debe ser un número entero válido");
+        }
+        
+        try {
+            jornadaParsed = Short.parseShort(jornada);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Header 'jornada' debe ser un número válido");
+        }
+        
+        try {
+            canalParsed = Short.parseShort(canal);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Header 'Canal' debe ser un número válido");
+        }
+        
+        try {
+            modoOperacionParsed = Short.parseShort(modoDeOperacion);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Header 'modoDeOperacion' debe ser un número válido");
+        }
+        
+        try {
+            perfilParsed = Short.parseShort(perfil);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Header 'perfil' debe ser un número válido");
+        }
+
         return HeadersPer002RequestDto.builder()
                 .nombreOperacion(nombreOperacion)
-                .total(Integer.parseInt(total))
-                .jornada(Short.parseShort(jornada))
-                .canal(Short.parseShort(canal))
-                .modoOperacion(Short.parseShort(modoDeOperacion))
+                .total(totalParsed)
+                .jornada(jornadaParsed)
+                .canal(canalParsed)
+                .modoOperacion(modoOperacionParsed)
                 .usuario(usuario)
-                .perfil(Short.parseShort(perfil))
+                .perfil(perfilParsed)
                 .versionServicio(versionServicio)
                 .idTransaccion(idTransaccion)
                 .build();

@@ -9,13 +9,13 @@ import lombok.Setter;
 @Builder
 public class HeadersPer002RequestDto {
 
-    public String nombreOperacion;
-    public int total;
-    public short jornada;
-    public short canal;
-    public short modoOperacion;
-    public String usuario;
-    public short perfil;
-    public String versionServicio;
-    public String idTransaccion;
+    private String nombreOperacion;
+    private int total;
+    private short jornada;
+    private short canal;
+    private short modoOperacion;
+    private String usuario;
+    private short perfil;
+    private String versionServicio;
+    private String idTransaccion;
 }

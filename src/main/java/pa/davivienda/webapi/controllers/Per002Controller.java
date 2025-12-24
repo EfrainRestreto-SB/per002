@@ -65,14 +65,31 @@ public class Per002Controller {
             Per002ResponseDto per002ResponseDto = per002UseCase.consultaCostoTransaccionPer(headers, per002RequestDto);
             per002ResponseModel = per002Mapper.toResponseModel(per002ResponseDto);
         }
-        catch (Exception ex) {
+        catch (IllegalArgumentException iex) {
+            // Errores de validación -> 400 Bad Request
             Map<String, Object> responseHeaders = Map.of(
                     "nombreOperacion", headers.getNombreOperacion(),
                     "total", headers.getTotal(),
                     "caracterAceptacion", "M",
                     "ultimoMensaje", 1,
                     "idTransaccion", headers.getIdTransaccion(),
-                    "codMsgRespuesta", String.valueOf(Response.Status.INTERNAL_SERVER_ERROR),
+                    "codMsgRespuesta", String.valueOf(Response.Status.BAD_REQUEST.getStatusCode()),
+                    "msgRespuesta", iex.getMessage()
+            );
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            builder.entity(Map.of("validationError", iex.getMessage()));
+            responseHeaders.forEach(builder::header);
+            return builder.build();
+        }
+        catch (Exception ex) {
+            // Errores del servidor -> 500 Internal Server Error
+            Map<String, Object> responseHeaders = Map.of(
+                    "nombreOperacion", headers.getNombreOperacion(),
+                    "total", headers.getTotal(),
+                    "caracterAceptacion", "M",
+                    "ultimoMensaje", 1,
+                    "idTransaccion", headers.getIdTransaccion(),
+                    "codMsgRespuesta", String.valueOf(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()),
                     "msgRespuesta", ex.getMessage()
             );
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);

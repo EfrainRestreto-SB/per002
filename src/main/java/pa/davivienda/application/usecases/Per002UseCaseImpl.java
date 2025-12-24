@@ -42,12 +42,29 @@ public class Per002UseCaseImpl implements Per002UseCase {
             // 📝 AUDITORÍA 1: ENTRADA
             auditEntrada(idTransaccion, canal, headers, request);
             
-            // 1️⃣ Validación de headers
+            // 1️⃣ Validación de campos obligatorios
+            if (request.getCodTipoIdentificacion() == null || request.getCodTipoIdentificacion().trim().isEmpty()) {
+                throw new IllegalArgumentException("codTipoIdentificacion es obligatorio");
+            }
+            
+            if (request.getValNumeroIdentificacion() == null || request.getValNumeroIdentificacion().trim().isEmpty()) {
+                throw new IllegalArgumentException("valNumeroIdentificacion es obligatorio");
+            }
+            
+            if (request.getCodTipoConcepto() == null || request.getCodTipoConcepto().trim().isEmpty()) {
+                throw new IllegalArgumentException("codTipoConcepto es obligatorio");
+            }
+            
+            if (request.getCodPais() == null || request.getCodPais().trim().isEmpty()) {
+                throw new IllegalArgumentException("codPais es obligatorio");
+            }
+
+            // 2️⃣ Validación de headers
            if (!Constants.CANALES_PERMITIDOS.contains(headers.getCanal())) {
                 throw new IllegalArgumentException("Canal inválido. Solo se permiten 81 o 151");
             }
 
-            // 2️⃣ Validación de código de país
+            // 3️⃣ Validación de código de país
             if (!InputTransactionCodeValidator.codPaisValidate(request.getCodPais())) {
                 throw new IllegalArgumentException("Código de país no permitido");
             }
@@ -56,7 +73,8 @@ public class Per002UseCaseImpl implements Per002UseCase {
                 throw new IllegalArgumentException("Código de concepto no pertenece al catálogo PER");
             }
             InputTransactionCodeValidator.validateCanalConceptoRelation(headers.getCanal(), request.getCodTipoConcepto());
-            // 3️⃣ Homologación de transacción
+            
+            // 4️⃣ Homologación de transacción
             String trxCode = InputTransactionCodeValidator.getTransactionCodeHomologate(request.getCodTipoConcepto());
 
             // 📝 AUDITORÍA 2: TRAMA_OUT (Query 1 - Customer)
@@ -64,7 +82,7 @@ public class Per002UseCaseImpl implements Per002UseCase {
                          request.getCodTipoIdentificacion(), 
                          request.getValNumeroIdentificacion());
             
-            // 3️⃣ PRIMER SELECT (STATELESS)
+            // 5️⃣ PRIMER SELECT (STATELESS)
             Customer customer = statelessRepository.findCustomerByDocument(
                     request.getCodTipoIdentificacion(),
                     request.getValNumeroIdentificacion()
@@ -83,7 +101,7 @@ public class Per002UseCaseImpl implements Per002UseCase {
             // 📝 AUDITORÍA 4: TRAMA_OUT (Query 2 - TransactionCost)
             auditTramaOut(idTransaccion, canal, "findTransactionCost", customer.getCustomerId(), trxCode);
             
-            // 4️⃣ SEGUNDO SELECT (STATELESS)
+            // 6️⃣ SEGUNDO SELECT (STATELESS)
             TransactionCost transactionCost = statelessRepository.findTransactionCost(customer.getCustomerId(), trxCode);
 
             if (transactionCost == null) {
