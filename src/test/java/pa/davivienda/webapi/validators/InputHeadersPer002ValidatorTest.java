@@ -1,13 +1,15 @@
 package pa.davivienda.webapi.validators;
 
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.core.HttpHeaders;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
-import pa.davivienda.domain.dtos.requests.HeadersPer002RequestDto;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.core.HttpHeaders;
+import pa.davivienda.domain.dtos.requests.HeadersPer002RequestDto;
 
 /**
  * Tests unitarios para InputHeadersPer002Validator
