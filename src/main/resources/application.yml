@@ -36,7 +36,7 @@ quarkus:
     default-transaction-timeout: 30s
 
   hibernate-orm:
-    packages: org.acme.domain.entities
+    packages: pa.davivienda.domain.entities
     dialect: org.hibernate.dialect.DB2Dialect
 
     # 🔴 Hibernate SOLO como ORM, NO como gestor DB
@@ -64,3 +64,4 @@ quarkus:
         level: ERROR
       "org.hibernate.orm.jdbc.bind":
         level: TRACE
+
