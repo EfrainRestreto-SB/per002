@@ -3,6 +3,28 @@ package pa.davivienda.application.validators;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Validador de códigos de transacción y reglas de negocio PER.
+ * 
+ * <p>Esta clase proporciona métodos estáticos para validar:</p>
+ * <ul>
+ *   <li>Códigos de transacción con homologación automática</li>
+ *   <li>Códigos de país permitidos</li>
+ *   <li>Conceptos PER válidos</li>
+ *   <li>Relación canal-concepto según reglas de negocio</li>
+ * </ul>
+ * 
+ * <p>Homologación de códigos:</p>
+ * <ul>
+ *   <li>COBPER → 01PAR157</li>
+ *   <li>TRCPRO → 01PAR153</li>
+ *   <li>TRCTER → 01PAR154</li>
+ * </ul>
+ * 
+ * @author Equipo PER002
+ * @version 1.0.0
+ * @since 2025-12-24
+ */
 public class InputTransactionCodeValidator {
 
     public static String getTransactionCodeHomologate(String transactionCode) {
